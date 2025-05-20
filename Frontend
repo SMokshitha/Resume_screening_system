@@ -1,0 +1,376 @@
+```html
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f0f4f8;
+    }
+    
+    .gradient-bg {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    
+    .result-card {
+        transition: all 0.3s ease;
+    }
+    
+    .result-card.match {
+        border-left: 6px solid #10b981;
+    }
+    
+    .result-card.partial {
+        border-left: 6px solid #f59e0b;
+    }
+    
+    .result-card.mismatch {
+        border-left: 6px solid #ef4444;
+    }
+    
+    .keyword {
+        display: inline-block;
+        margin: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    .keyword.match {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: #065f46;
+    }
+    
+    .keyword.missing {
+        background-color: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
+    }
+</style>
+    <!-- Main Content -->
+    <main class="container mx-auto flex-grow p-4 md:p-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Input Form -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Resume & Job Details</h2>
+                
+                <form id="screeningForm" class="space-y-6">
+                    <!-- Job Details Section -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-medium text-gray-700">Job Requirements</h3>
+                        
+                        <div>
+                            <label for="jobTitle" class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                            <input type="text" id="jobTitle" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. Frontend Developer">
+                        </div>
+                        
+                        <div>
+                            <label for="requiredSkills" class="block text-sm font-medium text-gray-700 mb-1">Required Skills (comma separated)</label>
+                            <textarea id="requiredSkills" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. JavaScript, React, CSS, HTML, Git"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="jobDescription" class="block text-sm font-medium text-gray-700 mb-1">Job Description</label>
+                            <textarea id="jobDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter the job description here..."></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="experienceRequired" class="block text-sm font-medium text-gray-700 mb-1">Years of Experience Required</label>
+                            <input type="number" id="experienceRequired" min="0" max="20" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 3">
+                        </div>
+                    </div>
+                    
+                    <!-- Resume Details Section -->
+                    <div class="space-y-4 pt-4 border-t border-gray-200">
+                        <h3 class="text-lg font-medium text-gray-700">Resume Information</h3>
+                        
+                        <div>
+                            <label for="candidateName" class="block text-sm font-medium text-gray-700 mb-1">Candidate Name</label>
+                            <input type="text" id="candidateName" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="Full Name">
+                        </div>
+                        
+                        <div>
+                            <label for="candidateSkills" class="block text-sm font-medium text-gray-700 mb-1">Candidate Skills (comma separated)</label>
+                            <textarea id="candidateSkills" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. JavaScript, React, CSS, HTML, Bootstrap"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="workExperience" class="block text-sm font-medium text-gray-700 mb-1">Work Experience (years)</label>
+                            <input type="number" id="workExperience" min="0" max="50" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 2">
+                        </div>
+                        
+                        <div>
+                            <label for="resumeSummary" class="block text-sm font-medium text-gray-700 mb-1">Resume Summary</label>
+                            <textarea id="resumeSummary" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter a summary of the candidate's resume..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md shadow-sm transition duration-200">
+                            Screen Resume
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Results Section -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Screening Results</h2>
+                
+                <div id="resultsContainer" class="hidden space-y-6">
+                    <!-- Overall Match -->
+                    <div id="overallResult" class="result-card p-5 rounded-lg bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium" id="resultTitle">Match Analysis</h3>
+                            <span id="matchPercentage" class="text-2xl font-bold">0%</span>
+                        </div>
+                        <p id="resultSummary" class="mt-2 text-gray-600">Complete the form to see results.</p>
+                    </div>
+                    
+                    <!-- Skills Match -->
+                    <div class="space-y-3">
+                        <h3 class="text-lg font-medium">Skills Analysis</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="mb-3">
+                                <h4 class="text-sm font-medium text-gray-500">MATCHING SKILLS</h4>
+                                <div id="matchingSkills" class="mt-2">
+                                    <!-- Matching skills will be inserted here -->
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500">MISSING SKILLS</h4>
+                                <div id="missingSkills" class="mt-2">
+                                    <!-- Missing skills will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Match -->
+                    <div class="space-y-3">
+                        <h3 class="text-lg font-medium">Experience Analysis</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-500">REQUIRED</p>
+                                    <p id="requiredExperience" class="font-medium">0 years</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">CANDIDATE HAS</p>
+                                    <p id="candidateExperience" class="font-medium">0 years</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">EXPERIENCE MATCH</p>
+                                    <p id="experienceMatch" class="font-medium">Insufficient</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recommendations -->
+                    <div class="space-y-3">
+                        <h3 class="text-lg font-medium">Recommendations</h3>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <ul id="recommendations" class="list-disc pl-5 space-y-2 text-gray-700">
+                                <!-- Recommendations will be inserted here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="emptyState" class="py-12 flex flex-col items-center justify-center text-center">
+                    <div class="bg-indigo-100 p-4 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900">No Results Yet</h3>
+                    <p class="mt-2 text-gray-500 max-w-sm">Fill out the form with job requirements and resume details to see the screening results.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-white py-6 px-4 border-t border-gray-200">
+        <div class="container mx-auto text-center text-gray-500 text-sm">
+            <p>Resume Screening System - A tool to match candidates with job requirements</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const screeningForm = document.getElementById('screeningForm');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const emptyState = document.getElementById('emptyState');
+        
+        screeningForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const jobTitle = document.getElementById('jobTitle').value;
+            const requiredSkills = document.getElementById('requiredSkills').value.split(',').map(skill => skill.trim().toLowerCase()).filter(Boolean);
+            const jobDescription = document.getElementById('jobDescription').value;
+            const experienceRequired = parseInt(document.getElementById('experienceRequired').value) || 0;
+            
+            const candidateName = document.getElementById('candidateName').value;
+            const candidateSkills = document.getElementById('candidateSkills').value.split(',').map(skill => skill.trim().toLowerCase()).filter(Boolean);
+            const workExperience = parseInt(document.getElementById('workExperience').value) || 0;
+            const resumeSummary = document.getElementById('resumeSummary').value;
+            
+            // Perform screening
+            const screening = screenResume(requiredSkills, experienceRequired, candidateSkills, workExperience, resumeSummary, jobDescription);
+            
+            // Update UI with results
+            updateResults(screening, requiredSkills, candidateSkills, experienceRequired, workExperience);
+            
+            // Show results
+            resultsContainer.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+        });
+        
+        function screenResume(requiredSkills, experienceRequired, candidateSkills, workExperience, resumeSummary, jobDescription) {
+            // Calculate skills match
+            const matchingSkills = requiredSkills.filter(skill => 
+                candidateSkills.some(candidateSkill => candidateSkill.includes(skill) || skill.includes(candidateSkill))
+            );
+            
+            const missingSkills = requiredSkills.filter(skill => 
+                !candidateSkills.some(candidateSkill => candidateSkill.includes(skill) || skill.includes(candidateSkill))
+            );
+            
+            const skillsMatchPercentage = requiredSkills.length > 0 
+                ? Math.round((matchingSkills.length / requiredSkills.length) * 100) 
+                : 0;
+            
+            // Calculate experience match
+            const experienceMatch = workExperience >= experienceRequired;
+            const experienceScore = experienceRequired > 0 
+                ? Math.min(workExperience / experienceRequired, 1.5) * 100 / 1.5 
+                : 100;
+            
+            // Calculate overall match
+            const overallScore = Math.round((skillsMatchPercentage * 0.7) + (experienceScore * 0.3));
+            
+            // Determine match category
+            let matchCategory;
+            if (overallScore >= 85) {
+                matchCategory = 'Strong Match';
+            } else if (overallScore >= 60) {
+                matchCategory = 'Potential Match';
+            } else {
+                matchCategory = 'Not a Good Match';
+            }
+            
+            // Generate recommendations
+            const recommendations = [];
+            
+            if (missingSkills.length > 0) {
+                recommendations.push(`Candidate is missing ${missingSkills.length} required skills: ${missingSkills.join(', ')}.`);
+            }
+            
+            if (!experienceMatch) {
+                recommendations.push(`Candidate has ${workExperience} years of experience, which is below the required ${experienceRequired} years.`);
+            }
+            
+            if (overallScore >= 85) {
+                recommendations.push('This candidate is a strong match for the position. Consider proceeding with an interview.');
+            } else if (overallScore >= 60) {
+                recommendations.push('This candidate shows potential but lacks some requirements. Consider for a junior position or further screening.');
+            } else {
+                recommendations.push('This candidate does not meet the core requirements for this position.');
+            }
+            
+            return {
+                overallScore,
+                matchCategory,
+                matchingSkills,
+                missingSkills,
+                experienceMatch,
+                recommendations
+            };
+        }
+        
+        function updateResults(screening, requiredSkills, candidateSkills, experienceRequired, workExperience) {
+            // Update overall result
+            const overallResult = document.getElementById('overallResult');
+            const resultTitle = document.getElementById('resultTitle');
+            const matchPercentage = document.getElementById('matchPercentage');
+            const resultSummary = document.getElementById('resultSummary');
+            
+            matchPercentage.textContent = `${screening.overallScore}%`;
+            resultTitle.textContent = screening.matchCategory;
+            
+            if (screening.overallScore >= 85) {
+                overallResult.className = 'result-card match p-5 rounded-lg bg-green-50';
+                resultSummary.textContent = 'This candidate is a strong match for the position.';
+            } else if (screening.overallScore >= 60) {
+                overallResult.className = 'result-card partial p-5 rounded-lg bg-yellow-50';
+                resultSummary.textContent = 'This candidate shows potential but lacks some requirements.';
+            } else {
+                overallResult.className = 'result-card mismatch p-5 rounded-lg bg-red-50';
+                resultSummary.textContent = 'This candidate does not meet the core requirements for this position.';
+            }
+            
+            // Update skills match
+            const matchingSkillsContainer = document.getElementById('matchingSkills');
+            const missingSkillsContainer = document.getElementById('missingSkills');
+            
+            matchingSkillsContainer.innerHTML = '';
+            missingSkillsContainer.innerHTML = '';
+            
+            if (screening.matchingSkills.length > 0) {
+                screening.matchingSkills.forEach(skill => {
+                    const skillElement = document.createElement('span');
+                    skillElement.className = 'keyword match';
+                    skillElement.textContent = skill;
+                    matchingSkillsContainer.appendChild(skillElement);
+                });
+            } else {
+                matchingSkillsContainer.textContent = 'No matching skills found';
+            }
+            
+            if (screening.missingSkills.length > 0) {
+                screening.missingSkills.forEach(skill => {
+                    const skillElement = document.createElement('span');
+                    skillElement.className = 'keyword missing';
+                    skillElement.textContent = skill;
+                    missingSkillsContainer.appendChild(skillElement);
+                });
+            } else {
+                missingSkillsContainer.textContent = 'No missing skills';
+            }
+            
+            // Update experience match
+            document.getElementById('requiredExperience').textContent = `${experienceRequired} years`;
+            document.getElementById('candidateExperience').textContent = `${workExperience} years`;
+            
+            const experienceMatchElement = document.getElementById('experienceMatch');
+            if (screening.experienceMatch) {
+                experienceMatchElement.textContent = 'Sufficient';
+                experienceMatchElement.className = 'font-medium text-green-600';
+            } else {
+                experienceMatchElement.textContent = 'Insufficient';
+                experienceMatchElement.className = 'font-medium text-red-600';
+            }
+            
+            // Update recommendations
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendationsContainer.innerHTML = '';
+            
+            screening.recommendations.forEach(recommendation => {
+                const li = document.createElement('li');
+                li.textContent = recommendation;
+                recommendationsContainer.appendChild(li);
+            });
+        }
+        
+        // Add sample data for demo purposes
+        document.getElementById('jobTitle').value = 'Frontend Developer';
+        document.getElementById('requiredSkills').value = 'JavaScript, React, CSS, HTML, Git';
+        document.getElementById('jobDescription').value = 'We are looking for a Frontend Developer with strong React skills and at least 3 years of experience building responsive web applications.';
+        document.getElementById('experienceRequired').value = '3';
+        
+        document.getElementById('candidateName').value = 'Alex Johnson';
+        document.getElementById('candidateSkills').value = 'JavaScript, React, CSS, HTML, Bootstrap, jQuery';
+        document.getElementById('workExperience').value = '2';
+        document.getElementById('resumeSummary').value = 'Frontend developer with 2 years of experience building React applications. Proficient in JavaScript, HTML, CSS, and various frontend frameworks.';
+    });
+</script>
