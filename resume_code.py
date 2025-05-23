@@ -119,6 +119,6 @@ def pred(input_resume):
 
     return predicted_category_name[0]  # Return the category name
 
-myresume= """" """
+myresume= """"**sample resume """
 pred(myresume)
 
