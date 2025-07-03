@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+ #csv file for training the model
 df = pd.read_csv('UpdatedResumeDataSet.csv')
 
 df.head()
