@@ -7,7 +7,6 @@ import seaborn as sns
 df = pd.read_csv('UpdatedResumeDataSet.csv')
 
 df.head()
-
 # Check the original category distribution
 print("Original Category Distribution:")
 print(df['Category'].value_counts())
